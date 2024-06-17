@@ -25,6 +25,9 @@
     </parent>
 
     <artifactId>dolphinscheduler-standalone-server</artifactId>
+    <properties>
+        <scala.version>2.12.17</scala.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
@@ -37,7 +40,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.dolphinscheduler</groupId>
@@ -66,7 +68,30 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--scala-->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+
+        <!--        <dependency>-->
+        <!--            <groupId>com.sbdphub.sbdp</groupId>-->
+        <!--            <artifactId>sbdp-dbt</artifactId>-->
+        <!--            <version>0.1.0-SNAPSHOT</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-kubernetes-client-config</artifactId>

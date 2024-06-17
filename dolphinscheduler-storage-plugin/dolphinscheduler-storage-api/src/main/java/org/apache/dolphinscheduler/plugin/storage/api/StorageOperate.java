@@ -29,7 +29,7 @@ import java.util.List;
 
 public interface StorageOperate {
 
-    String RESOURCE_UPLOAD_PATH = PropertyUtils.getString(Constants.RESOURCE_UPLOAD_PATH, "/dolphinscheduler");
+    String RESOURCE_UPLOAD_PATH = PropertyUtils.getString(Constants.RESOURCE_UPLOAD_PATH, "/tmp");
 
     /**
      * if the resource of tenant 's exist, the resource of folder will be created

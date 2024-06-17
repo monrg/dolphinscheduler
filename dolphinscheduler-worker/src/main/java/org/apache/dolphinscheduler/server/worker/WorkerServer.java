@@ -84,13 +84,13 @@ public class WorkerServer implements IStoppable {
 
     @PostConstruct
     public void run() {
-        this.workerRpcServer.start();
+        // this.workerRpcServer.start();
         this.taskPluginManager.loadPlugin();
 
-        this.workerRegistryClient.setRegistryStoppable(this);
-        this.workerRegistryClient.start();
+        // this.workerRegistryClient.setRegistryStoppable(this);
+        // this.workerRegistryClient.start();
 
-        this.messageRetryRunner.start();
+        // this.messageRetryRunner.start();
 
         WorkerServerMetrics.registerWorkerCpuUsageGauge(() -> {
             SystemMetrics systemMetrics = metricsProvider.getSystemMetrics();

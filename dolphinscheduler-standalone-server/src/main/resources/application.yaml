@@ -38,10 +38,11 @@ spring:
     init:
       schema-locations: classpath:sql/dolphinscheduler_h2.sql
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:dolphinscheduler;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=true
-    username: sa
-    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: streampark
+
   quartz:
     job-store-type: jdbc
     jdbc:
@@ -89,19 +90,27 @@ mybatis-plus:
       id-type: auto
     banner: false
 
-registry:
-  type: zookeeper
-  zookeeper:
-    namespace: dolphinscheduler
-    connect-string: localhost:2181
-    retry-policy:
-      base-sleep-time: 60ms
-      max-sleep: 300ms
-      max-retries: 5
-    session-timeout: 30s
-    connection-timeout: 9s
-    block-until-connected: 600ms
-    digest: ~
+#registry:
+#  type: jdbc
+  # Used to schedule refresh the ephemeral data/ lock.
+#  term-refresh-interval: 200s
+#  # Used to calculate the expire time,
+#  # e.g. if you set 2, and latest two refresh error, then the ephemeral data/lock will be expire.
+#  term-expire-times: 300
+
+#registry:
+#  type: zookeeper
+#  zookeeper:
+#    namespace: dolphinscheduler
+#    connect-string: localhost:2181
+#    retry-policy:
+#      base-sleep-time: 60ms
+#      max-sleep: 300ms
+#      max-retries: 5
+#    session-timeout: 30s
+#    connection-timeout: 9s
+#    block-until-connected: 600ms
+#    digest: ~
 
 security:
   authentication:
@@ -250,7 +259,7 @@ api:
     max-global-qps-rate: 300
     tenant-switch: false
     default-tenant-qps-rate: 10
-      #customize-tenant-qps-rate:
+    #customize-tenant-qps-rate:
     # eg.
     #tenant1: 11
     #tenant2: 20
@@ -334,10 +343,15 @@ spring:
     activate:
       on-profile: mysql
   sql:
-     init:
-       schema-locations: classpath:sql/dolphinscheduler_mysql.sql
+    init:
+      schema-locations: classpath:sql/dolphinscheduler_mysql.sql
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/dolphinscheduler?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: root@123
+
+mybatis-plus:
+  configuration:
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

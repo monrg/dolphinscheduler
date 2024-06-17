@@ -102,7 +102,7 @@ public class MasterServer implements IStoppable {
     @PostConstruct
     public void run() throws SchedulerException {
         // init rpc server
-        this.masterRPCServer.start();
+        // this.masterRPCServer.start();
 
         // install task plugin
         this.taskPluginManager.loadPlugin();
@@ -118,7 +118,7 @@ public class MasterServer implements IStoppable {
         this.eventExecuteService.start();
         this.failoverExecuteThread.start();
 
-        this.schedulerApi.start();
+        // this.schedulerApi.start();
         this.taskGroupCoordinator.start();
 
         MasterServerMetrics.registerMasterCpuUsageGauge(() -> {

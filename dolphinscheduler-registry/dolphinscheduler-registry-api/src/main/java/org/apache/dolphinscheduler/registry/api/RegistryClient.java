@@ -34,12 +34,15 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -57,10 +60,81 @@ public class RegistryClient {
     private static final String EMPTY = "";
     private IStoppable stoppable;
 
-    private final Registry registry;
+    private final Registry registry = new InnerRegistert();
 
-    public RegistryClient(Registry registry) {
-        this.registry = registry;
+    // public RegistryClient(Registry registry) {
+    // this.registry = registry;
+    // }
+
+    static class InnerRegistert implements Registry {
+
+        private final Map<String, Boolean> keylock = new ConcurrentHashMap<>();
+        Map<String, String> map = new ConcurrentHashMap<>();
+        private final Map<String, List<SubscribeListener>> dataSubScribeMap = new ConcurrentHashMap<>();
+
+        private final List<ConnectionListener> connectionListeners = Collections.synchronizedList(new ArrayList<>());
+
+        @Override
+        public void connectUntilTimeout(@NonNull Duration timeout) throws RegistryException {
+        }
+
+        @Override
+        public boolean subscribe(String path, SubscribeListener listener) {
+            dataSubScribeMap.computeIfAbsent(path, k -> new ArrayList<>()).add(listener);
+            return true;
+        }
+
+        @Override
+        public void unsubscribe(String path) {
+            dataSubScribeMap.remove(path);
+        }
+
+        @Override
+        public void addConnectionStateListener(ConnectionListener listener) {
+            connectionListeners.add(listener);
+        }
+
+        @Override
+        public String get(String key) {
+            return map.get(key);
+        }
+
+        @Override
+        public void put(String key, String value, boolean deleteOnDisconnect) {
+            map.put(key, value);
+        }
+
+        @Override
+        public void delete(String key) {
+            map.remove(key);
+        }
+
+        @Override
+        public Collection<String> children(String key) {
+            return map.keySet().stream()
+                    .filter(fullPath -> fullPath.length() > key.length() && fullPath.startsWith(key))
+                    .map(fullPath -> StringUtils.substringBefore(fullPath.substring(key.length() + 1), "/"))
+                    .collect(Collectors.toList());
+        }
+
+        @Override
+        public boolean exists(String key) {
+            return map.containsKey(key);
+        }
+
+        @Override
+        public boolean acquireLock(String key) {
+            return keylock.putIfAbsent(key, true) == null;
+        }
+
+        @Override
+        public boolean releaseLock(String key) {
+            return keylock.remove(key);
+        }
+
+        @Override
+        public void close() throws IOException {
+        }
     }
 
     @PostConstruct
@@ -218,7 +292,8 @@ public class RegistryClient {
     }
 
     public Collection<String> getChildrenKeys(final String key) {
-        return registry.children(key);
+        Collection<String> children = registry.children(key);
+        return children;
     }
 
     public Set<String> getServerNodeSet(RegistryNodeType nodeType) {

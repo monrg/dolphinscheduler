@@ -26,7 +26,7 @@ public class SingletonJdkDynamicRpcClientProxyFactory {
             NettyRemotingClientFactory.buildNettyRemotingClient(new NettyClientConfig()));
 
     public static <T> T getProxyClient(String serverAddress, Class<T> clazz) {
-        return INSTANCE.getProxyClient(serverAddress, clazz);
+        return ConItils.getBean(clazz);
     }
 
 }

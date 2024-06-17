@@ -49,7 +49,7 @@ public class FailoverExecuteThread extends BaseDaemonThread {
     @Override
     public synchronized void start() {
         log.info("Master failover thread staring");
-        super.start();
+        // super.start();
         log.info("Master failover thread stared");
     }
 

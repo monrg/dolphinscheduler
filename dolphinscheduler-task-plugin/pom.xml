@@ -64,6 +64,9 @@
         <module>dolphinscheduler-task-linkis</module>
         <module>dolphinscheduler-task-datafactory</module>
         <module>dolphinscheduler-task-remoteshell</module>
+        <module>nml-task</module>
+        <module>dolphinscheduler-task-datafaker</module>
+        <module>dolphinscheduler-task-dbt</module>
     </modules>
 
     <dependencyManagement>
