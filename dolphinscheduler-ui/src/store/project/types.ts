@@ -59,6 +59,9 @@ type TaskType =
   | 'LINKIS'
   | 'DATA_FACTORY'
   | 'REMOTESHELL'
+  | 'DBT'
+  | 'DATAFAKER'
+
 
 type ProgramType = 'JAVA' | 'SCALA' | 'PYTHON'
 

@@ -54,6 +54,8 @@ export { useResources } from './use-resources'
 export { useTaskDefinition } from './use-task-definition'
 export { useJavaTaskMainJar } from './use-java-task-main-jar'
 
+export { useDbt } from './use-dbt'
+export { useDatafaker } from './use-datafaker'
 export { useShell } from './use-shell'
 export { useSpark } from './use-spark'
 export { useMr } from './use-mr'

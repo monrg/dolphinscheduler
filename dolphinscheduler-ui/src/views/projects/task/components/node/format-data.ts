@@ -25,7 +25,7 @@ import type {
   ILocalParam,
   IDependentParameters
 } from './types'
-import {ref} from "vue";
+import { ref } from 'vue'
 
 export function formatParams(data: INodeData): {
   processDefinitionCode: string
@@ -48,9 +48,23 @@ export function formatParams(data: INodeData): {
     }
   }
 
+  if (data.taskType === 'DBT') {
+    taskParams.runType = data.runType
+    taskParams.modelSchemaContent = data.modelSchemaContent
+    taskParams.modelContent = data.modelContent
+  }
+
+  if (data.taskType === 'DATAFAKER') {
+    taskParams.runType = data.runType
+    taskParams.configContent = data.configContent
+    taskParams.dataNumber = data.dataNumber
+    // eslint-disable-next-line no-console
+    console.log(data)
+  }
+
   if (
-    data.taskType &&
-    ['SPARK', 'MR', 'FLINK', 'FLINK_STREAM'].includes(data.taskType)
+      data.taskType &&
+      ['SPARK', 'MR', 'FLINK', 'FLINK_STREAM'].includes(data.taskType)
   ) {
     taskParams.programType = data.programType
     taskParams.mainClass = data.mainClass
@@ -132,7 +146,9 @@ export function formatParams(data: INodeData): {
           fieldsTerminated: data.targetHdfsFieldsTerminated,
           linesTerminated: data.targetHdfsLinesTerminated
         }
-      } else if (rdbmsSourceTypes.value.some(target => target === data.targetType)){
+      } else if (
+          rdbmsSourceTypes.value.some((target) => target === data.targetType)
+      ) {
         targetParams = {
           targetType: data.targetMysqlType,
           targetDatasource: data.targetMysqlDatasource,
@@ -145,7 +161,7 @@ export function formatParams(data: INodeData): {
           targetUpdateMode: data.targetMysqlUpdateMode
         }
       }
-      if (rdbmsSourceTypes.value.some(target => target === data.sourceType)) {
+      if (rdbmsSourceTypes.value.some((target) => target === data.sourceType)) {
         sourceParams = {
           srcTable: data.srcQueryType === '1' ? '' : data.srcTable,
           srcColumnType: data.srcQueryType === '1' ? '0' : data.srcColumnType,
@@ -513,8 +529,8 @@ export function formatParams(data: INodeData): {
       description: data.description,
       environmentCode: data.environmentCode || -1,
       failRetryInterval: data.failRetryInterval
-        ? String(data.failRetryInterval)
-        : '0',
+          ? String(data.failRetryInterval)
+          : '0',
       failRetryTimes: data.failRetryTimes ? String(data.failRetryTimes) : '0',
       flag: data.flag,
       isCache: data.isCache ? 'YES' : 'NO',
@@ -529,10 +545,10 @@ export function formatParams(data: INodeData): {
         initScript: data.initScript,
         rawScript: data.rawScript,
         resourceList: data.resourceList?.length
-          ? data.resourceList.map((fullName: string) => ({
+            ? data.resourceList.map((fullName: string) => ({
               resourceName: `${fullName}`
             }))
-          : [],
+            : [],
         ...taskParams
       },
       taskPriority: data.taskPriority,
@@ -570,8 +586,8 @@ export function formatModel(data: ITaskData) {
     timeoutFlag: data.timeoutFlag === 'OPEN',
     isCache: data.isCache === 'YES',
     timeoutNotifyStrategy: data.timeoutNotifyStrategy
-      ? [data.timeoutNotifyStrategy]
-      : [],
+        ? [data.timeoutNotifyStrategy]
+        : [],
     localParams: data.taskParams?.localParams || []
   } as INodeData
 
@@ -580,7 +596,7 @@ export function formatModel(data: ITaskData) {
   }
   if (data.taskParams?.resourceList) {
     params.resourceList = data.taskParams.resourceList.map(
-      (item: { resourceName: string }) => `${item.resourceName}`
+        (item: { resourceName: string }) => `${item.resourceName}`
     )
   }
   if (data.taskParams?.mainJar) {
@@ -593,7 +609,7 @@ export function formatModel(data: ITaskData) {
 
   if (data.taskParams?.targetParams) {
     const targetParams: ISqoopTargetParams = JSON.parse(
-      data.taskParams.targetParams
+        data.taskParams.targetParams
     )
     params.targetType = data.taskParams.targetType
     params.targetHiveDatabase = targetParams.hiveDatabase
@@ -601,24 +617,24 @@ export function formatModel(data: ITaskData) {
     params.targetHiveCreateTable = targetParams.createHiveTable
     params.targetHiveDropDelimiter = targetParams.dropDelimiter
     params.targetHiveOverWrite =
-      targetParams.hiveOverWrite === void 0 ? true : targetParams.hiveOverWrite
+        targetParams.hiveOverWrite === void 0 ? true : targetParams.hiveOverWrite
     params.targetHiveTargetDir = targetParams.hiveTargetDir
     params.targetHiveReplaceDelimiter = targetParams.replaceDelimiter
     params.targetHivePartitionKey = targetParams.hivePartitionKey
     params.targetHivePartitionValue = targetParams.hivePartitionValue
     params.targetHdfsTargetPath = targetParams.targetPath
     params.targetHdfsDeleteTargetDir =
-      targetParams.deleteTargetDir === void 0
-        ? true
-        : targetParams.deleteTargetDir
+        targetParams.deleteTargetDir === void 0
+            ? true
+            : targetParams.deleteTargetDir
     params.targetHdfsCompressionCodec =
-      targetParams.compressionCodec === void 0
-        ? 'snappy'
-        : targetParams.compressionCodec
+        targetParams.compressionCodec === void 0
+            ? 'snappy'
+            : targetParams.compressionCodec
     params.targetHdfsFileType =
-      targetParams.fileType === void 0
-        ? '--as-avrodatafile'
-        : targetParams.fileType
+        targetParams.fileType === void 0
+            ? '--as-avrodatafile'
+            : targetParams.fileType
     params.targetHdfsFieldsTerminated = targetParams.fieldsTerminated
     params.targetHdfsLinesTerminated = targetParams.linesTerminated
     params.targetMysqlType = targetParams.targetType
@@ -630,13 +646,13 @@ export function formatModel(data: ITaskData) {
     params.targetMysqlIsUpdate = targetParams.isUpdate
     params.targetMysqlTargetUpdateKey = targetParams.targetUpdateKey
     params.targetMysqlUpdateMode =
-      targetParams.targetUpdateMode === void 0
-        ? 'allowinsert'
-        : targetParams.targetUpdateMode
+        targetParams.targetUpdateMode === void 0
+            ? 'allowinsert'
+            : targetParams.targetUpdateMode
   }
   if (data.taskParams?.sourceParams) {
     const sourceParams: ISqoopSourceParams = JSON.parse(
-      data.taskParams.sourceParams
+        data.taskParams.sourceParams
     )
     params.srcTable = sourceParams.srcTable
     params.srcColumnType = sourceParams.srcColumnType
@@ -665,14 +681,14 @@ export function formatModel(data: ITaskData) {
   if (data.taskParams?.switchResult) {
     params.switchResult = data.taskParams.switchResult
     params.dependTaskList = data.taskParams.switchResult?.dependTaskList
-      ? data.taskParams.switchResult?.dependTaskList
-      : []
+        ? data.taskParams.switchResult?.dependTaskList
+        : []
     params.nextNode = data.taskParams.switchResult?.nextNode
   }
 
   if (data.taskParams?.dependence) {
     const dependence: IDependentParameters = JSON.parse(
-      JSON.stringify(data.taskParams.dependence)
+        JSON.stringify(data.taskParams.dependence)
     )
     params.checkInterval = dependence.checkInterval
     params.failurePolicy = dependence.failurePolicy
@@ -684,16 +700,16 @@ export function formatModel(data: ITaskData) {
   if (data.taskParams?.ruleInputParameter) {
     params.check_type = data.taskParams.ruleInputParameter.check_type
     params.comparison_execute_sql =
-      data.taskParams.ruleInputParameter.comparison_execute_sql
+        data.taskParams.ruleInputParameter.comparison_execute_sql
     params.comparison_type = data.taskParams.ruleInputParameter.comparison_type
     params.comparison_name = data.taskParams.ruleInputParameter.comparison_name
     params.failure_strategy =
-      data.taskParams.ruleInputParameter.failure_strategy
+        data.taskParams.ruleInputParameter.failure_strategy
     params.operator = data.taskParams.ruleInputParameter.operator
     params.src_connector_type =
-      data.taskParams.ruleInputParameter.src_connector_type
+        data.taskParams.ruleInputParameter.src_connector_type
     params.src_datasource_id =
-      data.taskParams.ruleInputParameter.src_datasource_id
+        data.taskParams.ruleInputParameter.src_datasource_id
     params.src_database = data.taskParams.ruleInputParameter.src_database
     params.src_table = data.taskParams.ruleInputParameter.src_table
     params.field_length = data.taskParams.ruleInputParameter.field_length
@@ -706,18 +722,18 @@ export function formatModel(data: ITaskData) {
     params.src_filter = data.taskParams.ruleInputParameter.src_filter
     params.src_field = data.taskParams.ruleInputParameter.src_field
     params.statistics_execute_sql =
-      data.taskParams.ruleInputParameter.statistics_execute_sql
+        data.taskParams.ruleInputParameter.statistics_execute_sql
     params.statistics_name = data.taskParams.ruleInputParameter.statistics_name
     params.target_connector_type =
-      data.taskParams.ruleInputParameter.target_connector_type
+        data.taskParams.ruleInputParameter.target_connector_type
     params.target_datasource_id =
-      data.taskParams.ruleInputParameter.target_datasource_id
+        data.taskParams.ruleInputParameter.target_datasource_id
     params.target_database = data.taskParams.ruleInputParameter.target_database
     params.target_table = data.taskParams.ruleInputParameter.target_table
     params.threshold = data.taskParams.ruleInputParameter.threshold
     if (data.taskParams.ruleInputParameter.mapping_columns)
       params.mapping_columns = JSON.parse(
-        data.taskParams.ruleInputParameter.mapping_columns
+          data.taskParams.ruleInputParameter.mapping_columns
       )
   }
   if (data.taskParams?.sparkParameters) {

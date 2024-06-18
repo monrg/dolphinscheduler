@@ -14,28 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { defineComponent } from 'vue'
+import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { NTabPane, NTabs } from 'naive-ui'
-import BatchTaskDefinition from './batch-task'
-import StreamTaskDefinition from './stream-task'
+import { useResources } from '.'
+import type { IJsonItem } from '../types'
 
-const TaskDefinition = defineComponent({
-  name: 'task-definition',
-  setup() {
-    const { t } = useI18n()
-    return () => (
-      <NTabs type='line' animated>
-        {/*<NTabPane name='Batch' tab={t('project.task.batch_task')}>*/}
-        {/*  <BatchTaskDefinition />*/}
-        {/*</NTabPane>*/}
-        {/*<NTabPane name='Stream' tab={t('project.task.stream_task')}>*/}
-        {/*  <StreamTaskDefinition />*/}
-        {/*</NTabPane>*/}
-      </NTabs>
-    )
-  }
-})
-
-export default TaskDefinition
+export function useDbt(model: { [field: string]: any }): IJsonItem[] {
+  const { t } = useI18n()
+  const mainArgsSpan = computed(() => (model.programType = 40))
+  return [
+    {
+      type: 'input',
+      field: 'modelSchemaContent',
+      span: mainArgsSpan,
+      name: t('project.node.model_schema_content'),
+      props: {
+        type: 'textarea',
+        placeholder: t('project.node.model_schema_content_tips')
+      }
+    },
+    {
+      type: 'input',
+      field: 'modelContent',
+      span: mainArgsSpan,
+      name: t('project.node.model_content'),
+      props: {
+        type: 'textarea',
+        placeholder: t('project.node.model_content_tips')
+      }
+    },
+    useResources(24, true, 1)
+  ]
+}

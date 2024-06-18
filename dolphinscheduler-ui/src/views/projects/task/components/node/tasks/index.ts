@@ -53,8 +53,11 @@ import { useLinkis } from './use-linkis'
 import { useDataFactory } from './use-data-factory'
 import { useRemoteShell } from './use-remote-shell'
 import { useDynamic } from './use-dynamic'
-
+import { useDbt } from './use-dbt'
+import { useDatafaker } from './use-datafaker'
 export default {
+  DATAFAKER: useDatafaker,
+  DBT: useDbt,
   SHELL: useShell,
   SUB_PROCESS: useSubProcess,
   DYNAMIC: useDynamic,

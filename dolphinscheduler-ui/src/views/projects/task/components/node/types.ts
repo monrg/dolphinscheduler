@@ -285,6 +285,12 @@ interface ITaskParams {
   executorMemory?: string
   executorCores?: number
   mainArgs?: string
+  modelSchemaContent?: string
+  modelContent?: string
+  format?: string
+  sink?: string
+  dataNumber?: number
+  configContent?: string
   others?: string
   httpMethod?: string
   httpBody?: string
@@ -457,22 +463,22 @@ interface ITaskParams {
 }
 
 interface INodeData
-  extends Omit<
-      ITaskParams,
-      | 'resourceList'
-      | 'mainJar'
-      | 'targetParams'
-      | 'sourceParams'
-      | 'dependence'
-      | 'sparkParameters'
-      | 'conditionResult'
-      | 'udfs'
-      | 'customConfig'
+    extends Omit<
+        ITaskParams,
+        | 'resourceList'
+        | 'mainJar'
+        | 'targetParams'
+        | 'sourceParams'
+        | 'dependence'
+        | 'sparkParameters'
+        | 'conditionResult'
+        | 'udfs'
+        | 'customConfig'
     >,
-    ISqoopTargetData,
-    ISqoopSourceData,
-    IDependentParameters,
-    Omit<IRuleParameters, 'mapping_columns'> {
+        ISqoopTargetData,
+        ISqoopSourceData,
+        IDependentParameters,
+        Omit<IRuleParameters, 'mapping_columns'> {
   id?: string
   taskType?: ITaskType
   processName?: number
@@ -514,10 +520,10 @@ interface INodeData
 }
 
 interface ITaskData
-  extends Omit<
-    INodeData,
-    'isCache' | 'timeoutFlag' | 'taskPriority' | 'timeoutNotifyStrategy'
-  > {
+    extends Omit<
+        INodeData,
+        'isCache' | 'timeoutFlag' | 'taskPriority' | 'timeoutNotifyStrategy'
+    > {
   name?: string
   taskPriority?: string
   isCache?: 'YES' | 'NO'

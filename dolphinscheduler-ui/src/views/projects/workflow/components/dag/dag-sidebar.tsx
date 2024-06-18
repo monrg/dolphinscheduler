@@ -47,13 +47,37 @@ export default defineComponent({
 
     const handleDagMenu = () => {
       getDagMenu().then((res: any) => {
-        variables.dataList = res.map((item: any) => {
-          return {
-            ...item,
+        variables.dataList = [
+          {
+            collection: false,
             starHover: false,
-            type: item.taskType
+            taskCategory: "Universal",
+            taskType: "TEST_SUB_PROCESS",
+            type: "SUB_PROCESS",
+          },
+          {
+            collection: false,
+            starHover: false,
+            taskCategory: "Universal",
+            taskType: "DBT",
+            type: "DBT",
+          },
+          {
+            collection: false,
+            starHover: false,
+            taskCategory: "Universal",
+            taskType: "DATAFAKER",
+            type: "DATAFAKER",
           }
-        })
+        ]
+        // variables.dataList = res.map((item: any) => {
+        //   return {
+        //     ...item,
+        //     starHover: false,
+        //     type: item.taskType
+        //   }
+        //
+        // })
         variables.universal = variables.dataList.filter(
           (item: any) => item.taskCategory === 'Universal'
         )

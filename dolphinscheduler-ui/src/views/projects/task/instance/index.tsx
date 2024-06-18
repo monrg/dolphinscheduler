@@ -30,9 +30,9 @@ const TaskDefinition = defineComponent({
         <NTabPane name='Batch' tab={t('project.task.batch_task')}>
           <BatchTaskInstance />
         </NTabPane>
-        <NTabPane name='Stream' tab={t('project.task.stream_task')}>
-          <StreamTaskInstance />
-        </NTabPane>
+        {/*<NTabPane name='Stream' tab={t('project.task.stream_task')}>*/}
+        {/*  <StreamTaskInstance />*/}
+        {/*</NTabPane>*/}
       </NTabs>
     )
   }

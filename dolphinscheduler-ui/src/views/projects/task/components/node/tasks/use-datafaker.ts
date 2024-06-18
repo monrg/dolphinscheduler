@@ -15,27 +15,40 @@
  * limitations under the License.
  */
 
-import { defineComponent } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { NTabPane, NTabs } from 'naive-ui'
-import BatchTaskDefinition from './batch-task'
-import StreamTaskDefinition from './stream-task'
+import { reactive } from 'vue'
+import * as Fields from '../fields/index'
+import type { IJsonItem, INodeData, ITaskData } from '../types'
 
-const TaskDefinition = defineComponent({
-  name: 'task-definition',
-  setup() {
-    const { t } = useI18n()
-    return () => (
-      <NTabs type='line' animated>
-        {/*<NTabPane name='Batch' tab={t('project.task.batch_task')}>*/}
-        {/*  <BatchTaskDefinition />*/}
-        {/*</NTabPane>*/}
-        {/*<NTabPane name='Stream' tab={t('project.task.stream_task')}>*/}
-        {/*  <StreamTaskDefinition />*/}
-        {/*</NTabPane>*/}
-      </NTabs>
-    )
+export function useDatafaker({
+  projectCode,
+  from = 0,
+  readonly,
+  data
+}: {
+  projectCode: number
+  from?: number
+  readonly?: boolean
+  data?: ITaskData
+}) {
+  const model = reactive({
+    taskType: 'DATAFAKER',
+    name: '',
+    flag: 'YES',
+    description: '',
+    timeoutFlag: false,
+    timeoutNotifyStrategy: ['WARN'],
+    localParams: [],
+    environmentCode: null,
+    delayTime: 0,
+    rawScript: ''
+  } as INodeData)
+
+  return {
+    json: [
+      Fields.useName(from),
+      ...Fields.useTaskDefinition({ projectCode, from, readonly, data, model }),
+      ...Fields.useDatafaker(model)
+    ] as IJsonItem[],
+    model
   }
-})
-
-export default TaskDefinition
+}
